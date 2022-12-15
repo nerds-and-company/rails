@@ -300,7 +300,10 @@ module ActiveRecord
           # Shortcut when limit is zero.
           return 0 if limit_value == 0
 
-          query_builder = build_count_subquery(spawn, column_name, distinct)
+          # PostgreSQL doesn't like ORDER BY on a JOIN table when DISTINCT is used
+          relation = distinct && (joins_values.any? || left_outer_joins_values.any?) ? unscope(:order) : spawn
+
+          query_builder = build_count_subquery(relation, column_name, distinct)
         else
           # PostgreSQL doesn't like ORDER BY when there are no GROUP BY
           relation = unscope(:order).distinct!(false)
