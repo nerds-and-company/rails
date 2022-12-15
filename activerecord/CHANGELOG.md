@@ -1,3 +1,13 @@
+*   Avoid using `order` when table is joined on `count(:all)` with `distinct`
+
+    Previously this would throw the following error:
+
+    ```
+    ERROR:  for SELECT DISTINCT, ORDER BY expressions must appear in select list
+    ```
+
+    *Remco Meinen*
+
 *   The `namespaced_controller` Query Log tag now matches the `controller` format
 
     For example, a request processed by `NameSpaced::UsersController` will now log as:
